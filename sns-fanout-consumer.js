@@ -2,8 +2,8 @@ const { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } = require('@aws
 const { SNSClient, PublishCommand } = require('@aws-sdk/client-sns');
  
 const REGION = 'us-east-1';
-const QUEUE_URL = 'PEGAR_AQUI_queue_url_del_Laboratorio_11';
-const TOPIC_ARN = 'PEGAR_AQUI_order_events_topic_arn';
+const QUEUE_URL = 'https://sqs.us-east-1.amazonaws.com/809809509997/devsecops-lab-orders-api-queue';
+const TOPIC_ARN = 'https://nz4xyx1b1d.execute-api.us-east-1.amazonaws.com/';
  
 const sqsClient = new SQSClient({ region: REGION });
 const snsClient = new SNSClient({ region: REGION });
@@ -15,7 +15,7 @@ async function main() {
     MaxNumberOfMessages: 10,
     WaitTimeSeconds: 10,
   }));
- 
+    
   if (!Messages || Messages.length === 0) {
     console.log('No llegaron pedidos nuevos.');
     return;
@@ -28,7 +28,7 @@ async function main() {
       TopicArn: TOPIC_ARN,
       Message: JSON.stringify(order),
       Subject: 'NuevoPedido',
-    }));
+      }));
  
     console.log(`[fan-out] Pedido ${order.orderId} republicado en SNS para todos los interesados.`);
  
